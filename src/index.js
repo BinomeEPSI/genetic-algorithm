@@ -1,20 +1,21 @@
-const {Gene} = require('./entity/gene')
+const {Chromosome} = require('./entity/chromosome')
+const {generateData, dataFileExists} = require('./generateData')
 
 let data = require('../data/cities.json')
+let nbChromosome = 5
+let chromosomes = []
+// let cities = data.map((element, index) => new Gene(element, index))
 
-let cities = data.map((element, index) => new Gene(element, index))
-
-let bordeaux = cities[0]
-let nantes = cities[2]
-
-console.log(bordeaux, nantes, bordeaux.distanceTo(nantes))
-
-const {generateData, dataFileExists} = require('./generateData')
+console.log()
 
 if (!dataFileExists()) {
   generateData()
 }
 
-let citiesData = require('../data/data')
+for (let i = 0; i < nbChromosome; i++) {
+  chromosomes.push(new Chromosome(data.sort((a, b) => {
+    return Math.random() * (1 - -1) + -1
+  })))
+}
 
-console.log(citiesData)
+console.log(chromosomes)
