@@ -5,6 +5,10 @@ module.exports.City = class City {
     this.name = element.city
   }
 
+  getName () {
+    return this.name
+  }
+
   /**
      * @see https://www.movable-type.co.uk/scripts/latlong.html
      * @see https://stackoverflow.com/a/5260472
