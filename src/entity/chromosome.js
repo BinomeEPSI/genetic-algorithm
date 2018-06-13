@@ -17,9 +17,9 @@ let ConvertBase = (num) => {
 
 module.exports.Chromosome = class Chromosome {
   constructor (elements, fitting) {
-    let nbBit = ConvertBase(elements.length - 1).getBinLength()
+    this.nbBit = ConvertBase(elements.length - 1).getBinLength()
     this.genes = elements.map((element, index) => {
-      return new Gene(element, ConvertBase(index).from(10).to(2, nbBit))
+      return new Gene(element, ConvertBase(index).from(10).to(2, this.nbBit))
     })
     this.fittingFunction = fitting
   }
@@ -30,5 +30,20 @@ module.exports.Chromosome = class Chromosome {
     return this.genes.reduce((sum, element, index) => {
       return sum + fitting(element, index, genes)
     }, 0)
+  }
+
+  /**
+   *
+   * @param {Chromosome} chromosome
+   */
+  reproduce (chromosome) {
+    let newGenes = this.genes.slice(0, Math.round(this.genes.length / 2))
+
+    chromosome.genes.forEach((gene) => {
+      if (!newGenes.includes(gene)) {
+        newGenes.push(gene)
+      }
+    })
+    return new Chromosome(newGenes, this.fittingFunction)
   }
 }

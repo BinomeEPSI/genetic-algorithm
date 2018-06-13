@@ -4,7 +4,18 @@ module.exports.Engine = class Engine {
   }
 
   reproduce () {
+    let newChromosomes = []
+    this.chromosomes.forEach((chromosome, index, chromosomes) => {
+      let chromosomesFiltered = chromosomes.filter((element) => {
+        return element !== chromosome
+      })
 
+      chromosomesFiltered.forEach(otherChromosome => {
+        newChromosomes.push(chromosome.reproduce(otherChromosome))
+      })
+    })
+
+    this.chromosomes = this.chromosomes.concat(newChromosomes)
   }
 
   naturalSelection () {
@@ -19,5 +30,13 @@ module.exports.Engine = class Engine {
     }).map((element) => {
       return element.chromosome
     })
+  }
+
+  start (nbIteration) {
+    for (let i = 0; i < nbIteration; i++) {
+      this.fitting()
+      this.naturalSelection()
+      this.reproduce()
+    }
   }
 }

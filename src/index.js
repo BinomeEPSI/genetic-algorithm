@@ -31,6 +31,5 @@ for (let i = 0; i < nbChromosome; i++) {
 
 let engine = new Engine(chromosomes)
 
-engine.fitting()
-engine.naturalSelection()
-console.log(engine.chromosomes)
+engine.start(2)
+console.log(engine.chromosomes.length)
