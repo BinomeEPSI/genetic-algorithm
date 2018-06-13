@@ -1,11 +1,11 @@
 const fs = require('fs')
-const { City } = require('./entity/city')
+const { Gene } = require('./entity/gene')
 
 let filename = './data/data.json'
 
 module.exports.generateData = () => {
   let data = require('../data/cities.json')
-  let cities = data.map((element) => new City(element))
+  let cities = data.map((element) => new Gene(element))
 
   let results = {}
   cities.forEach(city => {

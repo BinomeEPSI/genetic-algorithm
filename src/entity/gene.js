@@ -1,8 +1,9 @@
-module.exports.City = class City {
-  constructor (element) {
+module.exports.Gene = class Gene {
+  constructor (element, id) {
     this.lat = element.lan
     this.lng = element.lng
     this.name = element.city
+    this.id = id
   }
 
   getName () {
@@ -14,12 +15,12 @@ module.exports.City = class City {
      * @see https://stackoverflow.com/a/5260472
      * @param City city
     */
-  distanceTo (city, type = City.KILOMETER) {
+  distanceTo (gene, type = Gene.KILOMETER) {
     let R = 6371e3
-    let φ1 = City.toRadian(this.lat)
-    let φ2 = City.toRadian(city.lat)
-    let Δφ = City.toRadian(city.lat - this.lat)
-    let Δλ = City.toRadian(city.lng - this.lng)
+    let φ1 = Gene.toRadian(this.lat)
+    let φ2 = Gene.toRadian(gene.lat)
+    let Δφ = Gene.toRadian(gene.lat - this.lat)
+    let Δλ = Gene.toRadian(gene.lng - this.lng)
 
     let a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
             Math.cos(φ1) * Math.cos(φ2) *
@@ -28,7 +29,7 @@ module.exports.City = class City {
 
     let d = R * c
 
-    if (type === City.KILOMETER) {
+    if (type === Gene.KILOMETER) {
       return d / 1000
     }
 
@@ -40,5 +41,5 @@ module.exports.City = class City {
   }
 }
 
-module.exports.City.KILOMETER = 1
-module.exports.City.METER = 0
+module.exports.Gene.KILOMETER = 1
+module.exports.Gene.METER = 0
