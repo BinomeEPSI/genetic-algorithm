@@ -16,10 +16,19 @@ let ConvertBase = (num) => {
 }
 
 module.exports.Chromosome = class Chromosome {
-  constructor (elements) {
+  constructor (elements, fitting) {
     let nbBit = ConvertBase(elements.length - 1).getBinLength()
     this.genes = elements.map((element, index) => {
       return new Gene(element, ConvertBase(index).from(10).to(2, nbBit))
     })
+    this.fittingFunction = fitting
+  }
+
+  fitting () {
+    let fitting = this.fittingFunction
+    let genes = this.genes
+    return this.genes.reduce((sum, element, index) => {
+      return sum + fitting(element, index, genes)
+    }, 0)
   }
 }
