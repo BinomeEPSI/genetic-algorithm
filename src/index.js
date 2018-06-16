@@ -31,7 +31,8 @@ for (let i = 0; i < nbChromosome; i++) {
 
 let engine = new Engine(chromosomes)
 
-engine.start(100)
-console.log(engine.chromosomes.length)
+engine.start(100, Math.round(nbChromosome / 10))
+// Need to sort one last time.
+engine.fitting()
 console.log(engine.getResult().getOrder())
 console.log(engine.getResult().fitting())

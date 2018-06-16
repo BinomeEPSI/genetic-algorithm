@@ -48,6 +48,18 @@ module.exports.Chromosome = class Chromosome {
     return new Chromosome(newGenes, this.fittingFunction)
   }
 
+  mutate () {
+    // Mutation : Take 1 random index, and permute 2 elements
+    let max = this.genes.length - 1
+    let min = 0
+    let randomIndex1 = Math.round(Math.random() * (max - min) + min)
+    let randomIndex2 = randomIndex1 + 1 >= max ? 0 : randomIndex1 + 1
+    let tmp = this.genes[randomIndex1]
+    this.genes[randomIndex1] = this.genes[randomIndex2]
+    this.genes[randomIndex2] = tmp
+    return this
+  }
+
   getOrder () {
     return this.genes.map(gene => {
       return gene.getName()

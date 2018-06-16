@@ -4,7 +4,7 @@ module.exports.Engine = class Engine {
     this.initialPopulationSize = chromosomes.length
   }
 
-  reproduce () {
+  reproduce (needMutation) {
     let newChromosomes = []
     console.info(`Going to reproduce ${this.chromosomes.length} chromosomes between each others..`)
     for (let i = 0; i < this.chromosomes.length; i++) {
@@ -23,8 +23,16 @@ module.exports.Engine = class Engine {
 
     this.chromosomes = this.chromosomes.concat(newChromosomes)
 
+    // FIXME This is to avoid that the memory explode.
     if (this.chromosomes.length >= 4 * this.initialPopulationSize) {
       this.chromosomes = this.chromosomes.slice(0, Math.round(4 * this.initialPopulationSize))
+    }
+
+    if (needMutation) {
+      console.log('Going to apply a mutation on all chromosomes.')
+      this.chromosomes = this.chromosomes.map(element => {
+        return element.mutate()
+      })
     }
 
     console.info(`Reproduction done ! Their is now ${this.chromosomes.length} chromosomes.`)
@@ -44,17 +52,16 @@ module.exports.Engine = class Engine {
     })
   }
 
-  start (nbIteration) {
+  start (nbIteration, mutateEvery) {
     for (let i = 0; i < nbIteration; i++) {
       console.log(`Iteration ${i}/${nbIteration}`)
       this.fitting()
       this.naturalSelection()
-      this.reproduce()
+      this.reproduce(i % mutateEvery === 0)
     }
   }
 
   getResult () {
-    this.fitting()
     return this.chromosomes[0]
   }
 }
