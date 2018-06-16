@@ -3,7 +3,7 @@ const {generateData, dataFileExists} = require('./generateData')
 const {Engine} = require('./engine')
 
 let data = require('../data/cities.json')
-let nbChromosome = 5
+let nbChromosome = 100
 let chromosomes = []
 // let cities = data.map((element, index) => new Gene(element, index))
 
@@ -31,5 +31,7 @@ for (let i = 0; i < nbChromosome; i++) {
 
 let engine = new Engine(chromosomes)
 
-engine.start(2)
+engine.start(100)
 console.log(engine.chromosomes.length)
+console.log(engine.getResult().getOrder())
+console.log(engine.getResult().fitting())

@@ -44,6 +44,13 @@ module.exports.Chromosome = class Chromosome {
         newGenes.push(gene)
       }
     })
+
     return new Chromosome(newGenes, this.fittingFunction)
+  }
+
+  getOrder () {
+    return this.genes.map(gene => {
+      return gene.getName()
+    })
   }
 }
