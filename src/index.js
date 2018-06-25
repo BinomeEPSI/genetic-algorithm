@@ -3,40 +3,27 @@ const {City} = require('./entity/city')
 const {Journey} = require('./entity/journey')
 
 let data = require('../data/cities.json')
-let citiesList=data.map(element => { 
+let citiesList = data.map(element => {
   return new City(element.city, element.lan, element.lng)
-});
+})
 
-let nbChromosome = 100, startCity='Bordeaux'
+let nbChromosome = 100
+let startCity = 'Bordeaux'
 
-let startJourney=citiesList.find(city => city.name===startCity)
+let startJourney = citiesList.find(city => city.name === startCity)
 let genesList = citiesList.filter(city => city !== startJourney)
 
-/*
-
-let testJourney = new Journey(startJourney)
-genesList.forEach(function (gene) {
-  testJourney.add(gene)
-  console.log(testJourney.distance)
-});
-
-*/
-
-let chomosomeMaker = function() { 
-  return new Journey(startJourney) 
+let chomosomeMaker = function () {
+  return new Journey(startJourney)
 }
 
-
-let engine = new Engine( chomosomeMaker ,'steps', genesList,  (journeyA, journeyB) => {
+let engine = new Engine(chomosomeMaker, 'steps', genesList, (journeyA, journeyB) => {
   // tri des trajets: du plus court au plus long
   return journeyA.distance.total - journeyB.distance.total
 })
 
-
-
 engine.init(nbChromosome)
 
-let bestJourneys = engine.run(1000,3)
+let bestJourneys = engine.run(500, 0.3)
 
 console.log(bestJourneys[0])
- 
