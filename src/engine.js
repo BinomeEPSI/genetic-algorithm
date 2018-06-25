@@ -1,67 +1,75 @@
 module.exports.Engine = class Engine {
-  constructor (chromosomes) {
-    this.chromosomes = chromosomes
-    this.initialPopulationSize = chromosomes.length
+  constructor(exampleChromosome, genesAcces, genes, fittingFucntion) {
+    this.exampleChromosome = exampleChromosome
+    this.genes = genes;
+    this.fittingFucntion = fittingFucntion
+    this.genesAcces = genesAcces
+    this.chromosomes = []
+    this.limitChromosomes = 10
   }
 
-  reproduce (needMutation) {
-    let newChromosomes = []
-    console.info(`Going to reproduce ${this.chromosomes.length} chromosomes between each others..`)
-    for (let i = 0; i < this.chromosomes.length; i++) {
-      for (let j = 0; j < this.chromosomes.length; j++) {
-        if (this.chromosomes[i] !== this.chromosomes[j]) {
-          newChromosomes.push(this.chromosomes[i].reproduce(this.chromosomes[j]))
+  init(nbChromosome) {
+    this.limitChromosomes = nbChromosome
+    this.chromosomes = []
+    for (let i = 0; i < nbChromosome; i++) {
+      let genes = this.genes.slice(0).sort((a, b) => Math.random() * (1 - -1) + -1)
+      let newChromosome = this.exampleChromosome();
+      genes.forEach(function (gene) {
+        newChromosome.add(gene)
+      });
+      this.chromosomes.push(newChromosome)
+    }
+  }
+
+  fitting() {
+    this.chromosomes = this.chromosomes.sort(this.fittingFucntion)
+  }
+
+  naturalSelection() {
+    // Ach Ach!! Nous gardons que les meilleurs o/
+    this.chromosomes = this.chromosomes.slice(0, this.limitChromosomes)
+  }
+
+  reproduce(father, mother) {
+    let fatherGenes = father[this.genesAcces]
+    let motherGenes = mother[this.genesAcces]
+
+    let childGenes = fatherGenes.slice(0, Math.round(fatherGenes.length / 2))
+    childGenes = childGenes.concat(motherGenes.filter(gene => !childGenes.includes(gene)))
+    
+
+    let newChromosome = this.exampleChromosome();
+    childGenes.forEach(gene => newChromosome.add(gene))
+
+    return newChromosome
+
+  }
+
+  reproduction() {
+    let parents = this.chromosomes.slice(0)
+    console.info(`Going to reproduce ${parents.length} chromosomes between each others..`)
+    for (let i = 0; i < parents.length; i++) {
+      for (let j = 0; j < parents.length; j++) {
+        if (i !== j) {
+          this.chromosomes.push(this.reproduce(parents[i], parents[j]))
         }
       }
     }
-
-    // Take only a part of the newChromosome so that we don't get to many chromosomes
-    // let getNbNewChromosomes = this.initialPopulationSize
-    let getNbNewChromosomes = Math.round(newChromosomes.length / 2)
-    newChromosomes = newChromosomes.slice(0, getNbNewChromosomes)
-    console.debug(`Their is ${newChromosomes.length} new chromosomes selected`)
-
-    this.chromosomes = this.chromosomes.concat(newChromosomes)
-
-    // FIXME This is to avoid that the memory explode.
-    if (this.chromosomes.length >= 4 * this.initialPopulationSize) {
-      this.chromosomes = this.chromosomes.slice(0, Math.round(4 * this.initialPopulationSize))
-    }
-
-    if (needMutation) {
-      console.log('Going to apply a mutation on all chromosomes.')
-      this.chromosomes = this.chromosomes.map(element => {
-        return element.mutate()
-      })
-    }
-
-    console.info(`Reproduction done ! Their is now ${this.chromosomes.length} chromosomes.`)
   }
 
-  naturalSelection () {
-    this.chromosomes = this.chromosomes.slice(0, Math.round(this.chromosomes.length / 2))
-  }
 
-  fitting () {
-    this.chromosomes = this.chromosomes.map((chromosome) => {
-      return { chromosome: chromosome, total: chromosome.fitting() }
-    }).sort((a, b) => {
-      return a.total - b.total
-    }).map((element) => {
-      return element.chromosome
-    })
-  }
-
-  start (nbIteration, mutateEvery) {
-    for (let i = 0; i < nbIteration; i++) {
+  run(nbIteration, mutateEvery = -1) {
+    for (let i = 1; i <= nbIteration; i++) {
       console.log(`Iteration ${i}/${nbIteration}`)
+      this.reproduction()
+      if (mutateEvery > 1 && i % mutateEvery === 0) {
+        console.log(`Mutation in ${i}/${nbIteration}`)
+        //this.mutate()
+      }
       this.fitting()
       this.naturalSelection()
-      this.reproduce(i % mutateEvery === 0)
     }
-  }
 
-  getResult () {
-    return this.chromosomes[0]
+    return this.chromosomes
   }
 }
