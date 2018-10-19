@@ -67,7 +67,7 @@ module.exports.Engine = class Engine {
     for (let i = 0; i < parents.length; i++) {
       for (let j = 0; j < parents.length; j++) {
         if (i !== j) {
-          this.chromosomes.push(this.reproduce(parents[i], parents[j], mutantsNb < i*j))
+          this.chromosomes.push(this.reproduce(parents[i], parents[j], mutantsNb < i * j))
         }
       }
     }

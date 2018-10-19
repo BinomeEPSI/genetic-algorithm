@@ -5,14 +5,14 @@
   "main": "app/index.js",
   "scripts": {
     "start": "NODE_ENV=development node src/index.js",
-    "lint": "npx standard",
-    "lint-fix": "npx standard --fix"
+    "lint": "standard",
+    "lint:fix": "standard --fix"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/BinomeEPSI/genetic-algorithm.git"
   },
-  "author": "",
+  "author": "EPSI Bordeaux <contact@epsi-bordeaux.fr>",
   "license": "MIT",
   "pre-commit": [
     "lint"

@@ -1,0 +1,44 @@
+version: 2
+jobs:
+    build:
+        docker:
+            - image: circleci/node:10
+        steps:
+            - checkout
+            - run:
+                name: Install dependencies
+                command: npm install
+            - run: 
+                name: Linter (standard)
+                command: npm run lint
+            - run:
+                name: Security Audit
+                command: npm audit
+            - run:
+                name: Run application
+                command: npm start
+    build-8:
+        docker:
+            - image: circleci/node:8
+            - image: redis
+        steps:
+            - checkout
+            - run:
+                name: Install dependencies
+                command: npm install
+            - run: 
+                name: Linter (standard)
+                command: npm run lint
+            - run:
+                name: Security Audit
+                command: npm audit
+            - run:
+                name: Run application
+                command: npm start
+workflows:
+    version: 2
+    build-deploy:
+        jobs:
+            - build
+            - build-8
+
