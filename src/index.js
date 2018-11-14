@@ -1,6 +1,6 @@
-const {Engine} = require('./engine')
-const {City} = require('./entity/city')
-const {Journey} = require('./entity/journey')
+const { Engine } = require('./engine')
+const { City } = require('./entity/city')
+const { Journey } = require('./entity/journey')
 
 let data = require('../data/cities.json')
 let citiesList = data.map(element => {
